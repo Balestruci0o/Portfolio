@@ -1,0 +1,775 @@
+/* Globálny font pre celé portfólio (CLI aj GUI) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace; /* Ponechaný pôvodný font */
+}
+
+body {
+    background-color: #000;
+    color: #f0f0f0; /* Jemnejšia biela pre lepší kontrast v GUI */
+    height: 100vh;
+    overflow: hidden;
+    transition: all 1.5s ease-in-out;
+}
+
+
+/* CLI Styles - Pôvodné farby */
+#cli-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    transition: opacity 0.8s, transform 1.2s;
+}
+
+#cli-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+#cli-container::-webkit-scrollbar-track {
+    background: #000000; /* Pôvodná farba tracku */
+    border-radius: 4px;
+}
+
+#cli-container::-webkit-scrollbar-thumb {
+    background: #0f0; /* Pôvodná zelená */
+    border-radius: 4px;
+}
+
+#cli-container::-webkit-scrollbar-thumb:hover {
+    background: rgb(0, 166, 0); /* Pôvodná zelená pri hoveri */
+}
+
+#cli-container {
+    scrollbar-width: thin;
+    scrollbar-color: #0f0 #000000; /* Pôvodné farby scrollbaru */
+}
+
+#cli-header {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: #0f0; /* Pôvodná zelená */
+    text-shadow: 0 0 5px #0f0; /* Pôvodný tieň */
+}
+
+.ascii {
+    margin-left: -6rem; /* Kompenzuje padding 2rem na #cli-container */
+    /* Ak potrebujete nejaký malý odstup od úplného okraja, použite napr. -1.8rem alebo podobne */
+    color: #0f0; /* Zabezpečí, že má rovnakú farbu ako zvyšok CLI */
+    font-size: 1.2rem; /* Zabezpečí rovnakú veľkosť ako #cli-header */
+    text-shadow: 0 0 5px #0f0; /* Zabezpečí rovnaký tieň */
+}
+
+#cli-output {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    line-height: 1.5; /* Pôvodný line-height */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #0f0; /* Pôvodná zelená */
+}
+
+#cli-input-container {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Transparentné pozadie */
+    padding: 0; /* Odstrániť padding */
+    border-radius: 0; /* Odstrániť border-radius */
+    border: none; /* Odstrániť border */
+}
+
+#cli-prompt {
+    margin-right: 0.5rem;
+    color: #0f0; /* Pôvodná zelená */
+}
+
+#cli-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #0f0; /* Pôvodná zelená */
+    font-size: 1rem;
+    outline: none;
+    caret-color: #0f0; /* Pôvodná zelená */
+    padding: 0;
+}
+
+.caret {
+    display: inline-block;
+    width: 10px; /* Pôvodná šírka */
+    height: 20px; /* Pôvodná výška */
+    background-color: #0f0; /* Pôvodná zelená */
+    animation: blink 1s step-end infinite;
+    margin-left: 2px; /* Pôvodný odstup */
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* GUI Styles - Nový dizajn s Courier New */
+#gui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #0d0d1a 100%); /* Tmavší, sofistikovanejší gradient */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease-in-out;
+    padding: 6rem 2rem 2rem; /* Viac paddingu na spodku */
+    overflow-y: auto; /* Povoliť skrolovanie pre GUI */
+    -webkit-overflow-scrolling: touch; /* Pre plynulé skrolovanie na iOS */
+}
+
+#gui-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#gui-container::-webkit-scrollbar-track {
+    background: #1a1a2e;
+    border-radius: 4px;
+}
+
+#gui-container::-webkit-scrollbar-thumb {
+    background: #5e35b1; /* Fialová farba */
+    border-radius: 4px;
+}
+
+#gui-container::-webkit-scrollbar-thumb:hover {
+    background: #4527a0; /* Tmavšia fialová pri hoveri */
+}
+
+#gui-container {
+    scrollbar-width: thin;
+    scrollbar-color: #5e35b1 #1a1a2e;
+}
+
+
+.gui-active {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(13, 13, 26, 0.95); /* Tmavšie a menej priehľadné */
+    backdrop-filter: blur(15px); /* Silnejší blur */
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px; /* Jemne menší padding */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Výraznejší tieň */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Jemná spodná linka */
+}
+
+.logo {
+    font-size: 2rem; /* Väčšie logo */
+    font-weight: bold; /* Použijeme bold namiesto 700 pre Courier New */
+    color: #8c9eff; /* Modrofialová farba */
+    text-shadow: 0 0 15px rgba(140, 158, 255, 0.6); /* Výraznejší tieň */
+    letter-spacing: 1px; /* Jemné medzery medzi písmenami */
+}
+
+.nav {
+    display: flex;
+    gap: 2.8rem; /* Menšie medzery pre kompaktnejší vzhľad */
+}
+
+.nav-item {
+    color: #e0e0e0; /* Svetlejšia farba textu */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Plynulejšia animácia */
+    position: relative;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    font-weight: bold; /* Použijeme bold namiesto 600 pre Courier New */
+    font-size: 1.05rem;
+}
+
+.nav-item:hover {
+    color: #8c9eff; /* Modrofialová farba pri hoveri */
+    transform: translateY(-2px); /* Jemný posun nahor */
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px; /* Hrubšia linka */
+    background-color: #8c9eff; /* Modrofialová farba */
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+.terminal-btn {
+    background: linear-gradient(45deg, #5e35b1, #8c9eff); /* Fialový gradient */
+    border: none; /* Odstránený border */
+    color: #fff;
+    padding: 0.6rem 1.2rem; /* Väčší padding */
+    border-radius: 6px; /* Väčší border-radius */
+    cursor: pointer;
+    transition: all 0.4s ease;
+    z-index: 100;
+    font-weight: bold; /* Použijeme bold pre Courier New */
+    box-shadow: 0 4px 10px rgba(94, 53, 177, 0.4); /* Tieň */
+}
+
+.terminal-btn:hover {
+    background: linear-gradient(45deg, #4527a0, #7986cb); /* Jemne tmavší gradient */
+    box-shadow: 0 6px 15px rgba(94, 53, 177, 0.6); /* Výraznejší tieň */
+    transform: translateY(-2px);
+}
+
+.section {
+    margin-bottom: 4rem; /* Väčší odstup medzi sekciami */
+    padding: 2rem; /* Väčší vnútorný padding */
+    background: rgba(26, 26, 46, 0.8); /* Tmavšie pozadie sekcie */
+    border-radius: 12px; /* Väčší border-radius */
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5); /* Výraznejší tieň */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Jemný rámik */
+    opacity: 0;
+    transform: translateY(30px); /* Väčší posun pri animácii */
+    transition: opacity 1s ease, transform 1s ease; /* Plynulejšia animácia */
+}
+
+.section-title {
+    font-size: 2.2rem; /* Väčší nadpis */
+    margin-bottom: 2rem; /* Väčší odstup */
+    color: #8c9eff; /* Modrofialová farba */
+    position: relative;
+    display: inline-block;
+    font-weight: bold; /* Použijeme bold pre Courier New */
+    text-shadow: 0 0 10px rgba(140, 158, 255, 0.4);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* Posun linky nižšie */
+    left: 0;
+    width: 60%; /* Dlhšia linka */
+    height: 3px; /* Hrubšia linka */
+    background: linear-gradient(90deg, #8c9eff, transparent); /* Gradient pre linku */
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Väčšia minimálna šírka */
+    gap: 2rem; /* Väčšie medzery */
+}
+
+.skill-card {
+    background: rgba(255, 255, 255, 0.07); /* Svetlejšie pozadie */
+    border-radius: 10px; /* Väčší border-radius */
+    padding: 2rem; /* Väčší padding */
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Výraznejší rámik */
+    text-align: center; /* Centrovanie obsahu */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3); /* Tieň */
+}
+
+.skill-card:hover {
+    transform: translateY(-8px) scale(1.02); /* Výraznejší posun a jemné zväčšenie */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(140, 158, 255, 0.5); /* Výraznejší tieň a žiarenie */
+    border-color: #8c9eff; /* Modrofialový rámik */
+}
+
+.skill-icon {
+    font-size: 3rem; /* Väčšie ikony */
+    margin-bottom: 1.2rem;
+    color: #8c9eff; /* Modrofialová farba ikon */
+    text-shadow: 0 0 10px rgba(140, 158, 255, 0.5);
+}
+
+.skill-name {
+    font-size: 1.3rem; /* Väčší názov zručnosti */
+    margin-bottom: 0.8rem;
+    color: #fff;
+    font-weight: bold; /* Použijeme bold pre Courier New */
+}
+
+
+.skill-desc {
+    color: #b0b0b0; /* Svetlejšia farba popisu */
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Väčšia minimálna šírka */
+    gap: 2.5rem; /* Väčšie medzery */
+}
+
+.project-card {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.project-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(140, 158, 255, 0.5);
+    border-color: #8c9eff;
+}
+
+.project-image {
+    height: 200px; /* Väčšia výška obrázka */
+    background: linear-gradient(45deg, #0d0d1a, #1a1a2e); /* Tmavší gradient */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8c9eff;
+    font-size: 3.5rem; /* Väčšie ikony */
+}
+
+.project-content {
+    padding: 1.8rem; /* Väčší padding */
+}
+
+.project-title {
+    font-size: 1.4rem; /* Väčší názov projektu */
+    margin-bottom: 0.7rem;
+    color: #fff;
+    font-weight: bold; /* Použijeme bold pre Courier New */
+}
+
+.project-desc {
+    color: #b0b0b0;
+    margin-bottom: 1.2rem; /* Väčší odstup */
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.project-links {
+    display: flex;
+    gap: 1.2rem; /* Väčšie medzery */
+    margin-top: 1rem; /* Odstup od popisu */
+}
+
+.project-link {
+    color: #8c9eff;
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Väčšie medzery medzi ikonou a textom */
+    transition: all 0.3s ease;
+    font-weight: normal; /* Normal pre Courier New */
+}
+
+.project-link:hover {
+    text-decoration: underline;
+    color: #b39ddb; /* Svetlejšia modrofialová pri hoveri */
+}
+
+.contact-form {
+    max-width: 700px; /* Väčšia šírka formulára */
+    margin: 0 auto;
+    padding: 2.5rem; /* Väčší padding */
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.8rem; /* Väčší odstup */
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.6rem; /* Väčší odstup */
+    color: #fff;
+    font-weight: normal; /* Normal pre Courier New */
+    font-size: 1.1rem;
+}
+
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 1rem; /* Väčší padding */
+    background: rgba(255, 255, 255, 0.08); /* Svetlejšie pozadie */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Výraznejší rámik */
+    border-radius: 6px;
+    color: #f0f0f0;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace; /* Courier New aj pre formulár */
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+    color: #a0a0a0; /* Farba placeholderu */
+}
+
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #8c9eff;
+    box-shadow: 0 0 15px rgba(140, 158, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.12); /* Jemne svetlejšie pri focus */
+}
+
+.form-textarea {
+    min-height: 180px; /* Väčšia minimálna výška */
+    resize: vertical;
+}
+
+.submit-btn {
+    background: linear-gradient(45deg, #5e35b1, #8c9eff);
+    color: #fff;
+    border: none;
+    padding: 1rem 2.5rem; /* Väčší padding */
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold; /* Použijeme bold pre Courier New */
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 10px rgba(94, 53, 177, 0.4);
+    display: block; /* Tlačidlo zaberá celú šírku a je centrované */
+    margin: 0 auto;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(94, 53, 177, 0.6);
+    background: linear-gradient(45deg, #4527a0, #7986cb);
+}
+
+.footer {
+    text-align: center;
+    margin-top: 5rem; /* Väčší odstup */
+    padding: 2.5rem 0; /* Väčší padding */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    background-color: rgba(13, 13, 26, 0.8); /* Jemné pozadie */
+    border-radius: 12px 12px 0 0; /* Zaoblené rohy hore */
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem; /* Väčšie medzery */
+    margin-top: 1.5rem;
+}
+
+.social-link {
+    color: #b0b0b0;
+    font-size: 1.8rem; /* Väčšie ikony */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.social-link:hover {
+    color: #8c9eff;
+    transform: translateY(-5px) scale(1.1); /* Výraznejší posun a zväčšenie */
+    text-shadow: 0 0 15px rgba(140, 158, 255, 0.6);
+}
+
+/* Animations (zostávajú podobné, ale prispôsobené novým farbám) */
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-5px, 5px); }
+    40% { transform: translate(-5px, -5px); }
+    60% { transform: translate(5px, 5px); }
+    80% { transform: translate(5px, -5px); }
+    100% { transform: translate(0); }
+}
+
+.glitch {
+    animation: glitch 0.5s linear infinite;
+}
+
+
+/* Responsive */
+@media (max-width: 992px) {
+    .header {
+        padding: 15px 25px;
+    }
+    .nav {
+        gap: 1.5rem;
+    }
+    .logo {
+        font-size: 1.6rem;
+    }
+
+    .ascii {
+        font-size: 1rem; /* Zmenši veľkosť písma, aby sa lepšie zmestil */
+        /* Ak ste zmenili padding #cli-container pre stredné obrazovky, upravte aj margin-left */
+        /* Napr. ak má cli-container padding: 1.5rem; na 992px, potom margin-left: -1.5rem; */
+        margin-left: -5rem; /* Ak sa padding cli-containeru nemení, ponechajte -2rem */
+    }
+    .terminal-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    #gui-container {
+        padding: 5rem 1rem 1rem;
+    }
+    .section {
+        padding: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+    .skill-card {
+        padding: 1.5rem;
+    }
+    .skill-icon {
+        font-size: 2.5rem;
+    }
+    .skill-name {
+        font-size: 1.2rem;
+    }
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    .project-card {
+        padding: 0;
+    }
+    .project-image {
+        height: 150px;
+    }
+    .project-content {
+        padding: 1.2rem;
+    }
+    .project-title {
+        font-size: 1.2rem;
+    }
+    .project-desc {
+        font-size: 0.95rem;
+    }
+    .contact-form {
+        padding: 1.5rem;
+    }
+    .form-input, .form-textarea {
+        padding: 0.8rem;
+        font-size: 0.95rem;
+    }
+    .submit-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+    .footer {
+        padding: 1.5rem 0;
+        margin-top: 3rem;
+    }
+    .social-links {
+        gap: 1.2rem;
+    }
+    .social-link {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    .nav {
+        display: none; /* Skrytie nav pre mobily - zvyčajne sa rieši hamburger menu */
+    }
+    .terminal-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+    }
+
+    .ascii {
+        font-size: 0.7rem; /* Ešte viac zmenši veľkosť písma */
+        /* Môže byť potrebné ďalej upraviť margin-left, ak sa zmení padding #cli-container */
+        margin-left: -3.5rem; /* Prispôsobte podľa paddingu #cli-container na mobiloch */
+        /* Ak sa stále nezmestí, môžete ho skryť: */
+        /* display: none; */
+    }
+    .section {
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .skills-grid {
+        grid-template-columns: 1fr; /* Jeden stĺpec na mobiloch */
+        gap: 1rem;
+    }
+    .skill-card {
+        padding: 1rem;
+    }
+    .skill-icon {
+        font-size: 2rem;
+    }
+    .skill-name {
+        font-size: 1.1rem;
+    }
+    .project-card {
+        margin-bottom: 1.5rem;
+    }
+    .project-image {
+        height: 120px;
+    }
+    .project-content {
+        padding: 1rem;
+    }
+    .project-title {
+        font-size: 1.1rem;
+    }
+    .project-desc {
+        font-size: 0.9rem;
+    }
+    .contact-form {
+        padding: 1rem;
+    }
+    .form-input, .form-textarea {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+    .submit-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    .footer {
+        padding: 1rem 0;
+        margin-top: 2rem;
+    }
+    .social-links {
+        gap: 1rem;
+    }
+    .social-link {
+        font-size: 1.3rem;
+    }
+}
+
+
+/* Accessibility mode */
+.accessibility-mode {
+    animation: none !important;
+    transition: none !important;
+}
+
+.accessibility-mode .skill-card,
+.accessibility-mode .project-card {
+    transform: none !important;
+}
+
+.wip-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255, 165, 0, 0.2);
+    color: #ffa500;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.project-status {
+    margin-bottom: 0.5rem;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+.wip-badge {
+    animation: pulse 2s infinite;
+}
+
+/* Completed badge styles */
+.completed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(0, 200, 83, 0.2);
+    color: #00c853;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(0, 200, 83, 0.3);
+}
+
+/* Pulse animation for completed projects */
+@keyframes gentlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+.completed-badge.pulse {
+    animation: gentlePulse 3s infinite;
+}
+
+/* Optional: Change project image icon for completed projects */
+.project-card.completed .project-image {
+    color: #00c853;
+}
+
+/* Flicker effect */
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+    }
+    20%, 22%, 24%, 55% {
+        opacity: 0.5;
+    }
+}
+
+
+/* Efekt "lagu" – bledý a roztrasený */
+.lag-effect {
+    cursor: wait;
+    pointer-events: none;
+    filter: brightness(0.8) contrast(0.9);
+    animation: lagShake 0.1s infinite;
+}
+
+/* Animácia trasenia */
+@keyframes lagShake {
+    0% { transform: translate(0px, 0px); }
+    25% { transform: translate(1px, -1px); }
+    50% { transform: translate(-1px, 1px); }
+    75% { transform: translate(2px, 0px); }
+    100% { transform: translate(0px, 0px); }
+}
