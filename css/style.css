@@ -597,7 +597,8 @@ section {
 
 @media (max-width: 480px) {
     .ascii{
-        display: none;
+        font-size: 0.5rem;
+        margin-left: -2.5rem;
     }
     .terminal-btn {
         padding: 0.3rem 0.7rem;
