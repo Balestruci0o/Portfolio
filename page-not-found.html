@@ -60,7 +60,6 @@
             max-width: 600px;
         }
 
-        /* Command Prompt */
         .command-line {
             display: flex;
             align-items: center;
@@ -100,7 +99,6 @@
             50% { opacity: 0; }
         }
 
-        /* Matrix Background */
         .matrix-bg {
             position: absolute;
             top: 0;
@@ -124,7 +122,6 @@
             to { transform: translateY(100vh); }
         }
 
-        /* Navigation */
         .nav-links {
             margin-top: 2rem;
             display: flex;
@@ -171,7 +168,6 @@
     </div>
 
     <script>
-        // Matrix background effect
         function createMatrix() {
             const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
             const container = document.getElementById('matrix-bg');
@@ -193,7 +189,6 @@
             setInterval(addChar, 100);
         }
         
-        // Typewriter effect for command line
         function typeCommand() {
             const commands = [
                 "cd /home",
@@ -233,7 +228,6 @@
             setTimeout(type, 1000);
         }
         
-        // Initialize effects
         createMatrix();
         typeCommand();
     </script>
