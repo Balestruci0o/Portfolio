@@ -125,7 +125,7 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: opacity 1.5s ease-in-out;
-    padding: 6rem 2rem 2rem;
+    padding: 6rem 2rem 0rem;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
@@ -186,6 +186,10 @@ body {
 .nav {
     display: flex;
     gap: 2.8rem;
+}
+
+p{
+    line-height: 1.5;
 }
 
 .nav-item {
@@ -563,7 +567,6 @@ section {
 @media (max-width: 768px) {
     .header {
         padding: 15px 40px;
-        
     }
     .nav {
         display: none; 
@@ -592,7 +595,7 @@ section {
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
     .ascii{
         display: none;
     }
