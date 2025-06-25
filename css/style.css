@@ -600,8 +600,14 @@ section {
         display: none;
     }
     .terminal-btn {
-        display: none;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.7rem;
     }
+
+    .logo {
+        font-size: 1rem;
+    }
+
     #cli-input-container {
         padding: 0 1rem;
     }
