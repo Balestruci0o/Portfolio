@@ -398,6 +398,7 @@ section {
     cursor: not-allowed;
     opacity: 0.9;
     padding: 0 3px;
+    pointer-events: none;
 }
 
 .error::before,
