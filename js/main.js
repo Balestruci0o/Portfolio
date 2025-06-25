@@ -1,33 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     window.scrollTo({ top: 0});
-    // CLI Elements
-    const cliContainer = document.getElementById('cli-container'); // Changed from div to main
-    const cliOutput = document.getElementById('cli-output'); // Changed from div to pre
+    const cliContainer = document.getElementById('cli-container');
+    const cliOutput = document.getElementById('cli-output');
     const cliInput = document.getElementById('cli-input');
-    const cliInputContainer = document.getElementById('cli-input-container'); // Added for form element
-    const cliPrompt = document.getElementById('cli-prompt');
+    const cliInputContainer = document.getElementById('cli-input-container');
     
-    // GUI Elements
-    const guiContainer = document.getElementById('gui-container'); // Changed from div to main
+    const guiContainer = document.getElementById('gui-container');
     const terminalToggle = document.getElementById('terminal-toggle');
-    const sections = document.querySelectorAll('section'); // Changed from .section to section
-    const navItems = document.querySelectorAll('.nav-item'); // Select .nav-item which are now 'a' tags
+    const sections = document.querySelectorAll('section');
+    const navItems = document.querySelectorAll('.nav-item');
     
-    // Command history
     let commandHistory = [];
     let historyIndex = -1;
     
-    // System files that cannot be modified
     const SYSTEM_FILES = ['about.txt', 'projects.txt', 'contact.txt'];
 
-
-
-    // setTimeout(() => {
-    //     simulateMemoryCorruption();
-    // }, 15000);
-
-
-    // Initialize file storage
     function initFileStorage() {
         if (!localStorage.getItem('terminal_files')) {
             const defaultFiles = {
@@ -41,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initFileStorage();
     
-    // File operations
     function getFiles() {
         return JSON.parse(localStorage.getItem('terminal_files'));
     }
@@ -58,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return SYSTEM_FILES.includes(filename);
     }
     
-    // Easter eggs
     const easterEggs = {
         'memfail': () => {
             simulateMemoryCorruption();
@@ -68,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // Available commands
     const commands = {
         'help': {
             description: 'Show available commands',
@@ -191,34 +175,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     typeOutput("Current content:");
                     typeOutput(files[filename]);
                     
-                    // Store current command processing function
                     const originalProcessCommand = window.processCommand;
                     
-                    // Set up temporary command processor for editing
                     window.processCommand = function(content) {
                         if (content === 'EOF') {
-                            // Save the file
                             files[filename] = editingContent.join('\n');
                             saveFiles(files);
                             typeOutput(`File '${filename}' saved`);
                             
-                            // Restore original command processor
                             window.processCommand = originalProcessCommand;
                             return;
                         }
                         
-                        // Add content to the file
                         editingContent.push(content);
                     };
                     
-                    // Store editing content
                     const editingContent = [];
                 }
             }
         }
     };
     
-    // Type text with typing effect
     function typeOutput(text, callback) {
         const lines = text.split('\n');
         let currentLine = 0;
@@ -231,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const line = lines[currentLine];
             if (line.trim() === '') {
-                // Add empty line
                 const p = document.createElement('p');
                 cliOutput.appendChild(p);
                 currentLine++;
@@ -259,30 +235,24 @@ document.addEventListener('DOMContentLoaded', function() {
         typeLine();
     }
     
-    // Process CLI command
     window.processCommand = function(command) {
-        // Add to history
         commandHistory.push(command);
         historyIndex = commandHistory.length;
         
-        // Display command
         const p = document.createElement('p');
         p.innerHTML = `<span style="color:#0f0">user@portfolio:~$</span> ${command}`;
         cliOutput.appendChild(p);
         
-        // Parse command
         const parts = command.split(' ');
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
         
-        // Check for easter eggs first
         const lowerCommand = command.toLowerCase();
         if (easterEggs[lowerCommand]) {
             easterEggs[lowerCommand]();
             return;
         }
         
-        // Check for regular commands
         if (commands[cmd]) {
             commands[cmd].execute(args);
         } else {
@@ -292,20 +262,15 @@ document.addEventListener('DOMContentLoaded', function() {
         cliOutput.scrollTop = cliOutput.scrollHeight;
     };
     
-    // Launch GUI with animation
     function launchGUI() {
-        // Glitch effect
         cliContainer.classList.add('glitch');
         
-        // After glitch, fade out CLI and fade in GUI
         setTimeout(() => {
             cliContainer.style.opacity = '0';
             cliContainer.style.transform = 'scale(0.9)';
             
-            // Show GUI
             guiContainer.classList.add('gui-active');
             
-            // Animate sections
             sections.forEach((section, index) => {
                 setTimeout(() => {
                     section.style.opacity = '1';
@@ -313,7 +278,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 200 * index);
             });
             
-            // Remove glitch effect after transition
             setTimeout(() => {
                 cliContainer.classList.remove('glitch');
                 document.body.style.overflow = "auto";
@@ -322,11 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 800);
     }
     
-    // Toggle CLI from GUI
     function toggleCLI() {
         if (cliContainer.style.opacity === '0') {
-            // Show CLI
-            
             document.body.style.height = "100vh";
             cliContainer.style.opacity = '1';
             cliContainer.style.transform = 'scale(1)';
@@ -338,7 +299,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = "hidden";
 
         } else {
-            // Hide CLI
             document.body.style.height = "100%";
             document.body.style.overflow = "auto";
             cliContainer.style.opacity = '0';
@@ -347,12 +307,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Accessibility mode
     function toggleAccessibilityMode() {
         document.body.classList.toggle('accessibility-mode');
     }
     
-    // Event listeners
     cliInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             const command = this.value.trim();
@@ -361,14 +319,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             this.value = '';
         } else if (e.key === 'ArrowUp') {
-            // Command history navigation
             if (commandHistory.length > 0 && historyIndex > 0) {
                 historyIndex--;
                 this.value = commandHistory[historyIndex];
                 e.preventDefault();
             }
         } else if (e.key === 'ArrowDown') {
-            // Command history navigation
             if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
                 historyIndex++;
                 this.value = commandHistory[historyIndex];
@@ -379,15 +335,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
             }
         } else if (e.ctrlKey && e.key === '~') {
-            // Toggle CLI/GUI with Ctrl+~
             toggleCLI();
             e.preventDefault();
         }
     });
 
-    // Added event listener for form submission
     cliInputContainer.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
         const command = cliInput.value.trim();
         if (command) {
             processCommand(command);
@@ -397,8 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     terminalToggle.addEventListener('click', toggleCLI);
     
-    // Navigation in GUI
-    navItems.forEach(item => { // Changed selector to navItems
+    navItems.forEach(item => {
         item.addEventListener('click', function() {
             const section = this.getAttribute('data-section');
             document.getElementById(`${section}-section`).scrollIntoView({ 
@@ -407,12 +360,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Initial output
     setTimeout(() => {
         typeOutput("System ready. Type 'help' for available commands.");
     }, 1000);
     
-    // Keyboard shortcut for accessibility mode (Alt+A)
     document.addEventListener('keydown', function(e) {
         if (e.altKey && e.key.toLowerCase() === 'a') {
             toggleAccessibilityMode();
