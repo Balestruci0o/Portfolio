@@ -500,6 +500,11 @@ section {
 }
 
 @media (max-width: 992px) {
+    .header {
+        padding: 15px 23px;
+        justify-content: space-between;
+        
+    }
     .nav {
         gap: 1.5rem;
     }
@@ -558,7 +563,6 @@ section {
 @media (max-width: 768px) {
     .header {
         padding: 15px 40px;
-        justify-content: space-between;
         
     }
     .nav {
